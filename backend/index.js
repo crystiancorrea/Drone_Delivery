@@ -7,22 +7,20 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Configurações dos drones
-const DRONE_CAPACITY_KG = 10; // Exemplo: 10 kg
-const DRONE_MAX_DISTANCE_KM = 20; // Exemplo: 20 km por carga
+const DRONE_CAPACITY_KG = 10;
+const DRONE_MAX_DISTANCE_KM = 20;
 
-// Função para calcular distância Euclidiana
+// Função para calcular distância
 function distance(p1, p2) {
   return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
 }
 
-// Função para alocar pedidos em drones respeitando regras
+// Função para alocar pedidos em drones
 function allocateDrones(orders) {
-  // Ordena pedidos por prioridade (alta > média > baixa)
   const priorityMap = { alta: 3, media: 2, baixa: 1 };
   orders.sort((a, b) => priorityMap[b.priority] - priorityMap[a.priority]);
 
   const drones = [];
-  // Cada drone representa uma viagem
 
   for (const order of orders) {
     let allocated = false;
@@ -32,13 +30,9 @@ function allocateDrones(orders) {
       const totalWeight = drone.orders.reduce((sum, o) => sum + o.weight, 0) + order.weight;
       if (totalWeight > DRONE_CAPACITY_KG) continue;
 
-      // Calcula distância total da rota incluindo o novo pedido
-      // Considera que o drone sai do ponto (0,0), vai para cada pedido e volta
-      // Para simplificar, soma distâncias entre pedidos + ida e volta para (0,0)
       const points = drone.orders.map(o => ({ x: o.x, y: o.y }));
       points.push({ x: order.x, y: order.y });
 
-      // Ordena os pontos para minimizar distância (simples heurística: ordem atual + novo pedido no final)
       let dist = distance({ x: 0, y: 0 }, points[0]);
       for (let i = 0; i < points.length - 1; i++) {
         dist += distance(points[i], points[i + 1]);
@@ -53,13 +47,11 @@ function allocateDrones(orders) {
       }
     }
 
-    // Se não alocou, cria um novo drone (viagem)
     if (!allocated) {
       const dist = 2 * distance({ x: 0, y: 0 }, { x: order.x, y: order.y });
       if (order.weight <= DRONE_CAPACITY_KG && dist <= DRONE_MAX_DISTANCE_KM) {
         drones.push({ orders: [order], distance: dist });
       } else {
-        // Pedido não pode ser entregue (excede capacidade ou distância)
         drones.push({ orders: [order], distance: dist, error: 'Pedido não pode ser entregue' });
       }
     }
