@@ -14,7 +14,7 @@ Este projeto é uma aplicação fullstack que simula um sistema de entregas util
 - **Backend:** Node.js, Express
 - **Frontend:** React, Bootstrap
 - **Comunicação:** API REST com JSON
-- **Outros:** Axios para requisições HTTP, CORS, Body-parser
+- **Axios para requisições**
 
 ---
 
@@ -78,4 +78,5 @@ npm install
 ```bash
 npm start
 ```
+
 
