@@ -55,7 +55,7 @@ function App() {
 
   return (
     <div className="container mt-5">
-      <h1 className="mb-4">Sistema de Entregas por Drones</h1>
+      <h1 className="mb-4">Drone Delivery</h1>
 
       <div className="card p-4 mb-4">
         <h4>Adicionar Pedido</h4>
@@ -64,7 +64,7 @@ function App() {
             <input
               type="number"
               className="form-control"
-              placeholder="X"
+              placeholder="Horizontal (X)"
               name="x"
               value={form.x}
               onChange={handleChange}
@@ -74,7 +74,7 @@ function App() {
             <input
               type="number"
               className="form-control"
-              placeholder="Y"
+              placeholder="Vertical (Y)"
               name="y"
               value={form.y}
               onChange={handleChange}
