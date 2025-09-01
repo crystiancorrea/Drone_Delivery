@@ -4,6 +4,11 @@ Este projeto é uma aplicação fullstack que simula um sistema de entregas util
 
 ---
 
+<img width="1340" height="913" alt="image" src="https://github.com/user-attachments/assets/5de80ddb-3060-4868-8564-55ce939c0d55" />
+
+
+---
+
 ## Tecnologias utilizadas
 
 - **Backend:** Node.js, Express
@@ -73,3 +78,4 @@ npm install
 ```bash
 npm start
 ```
+
