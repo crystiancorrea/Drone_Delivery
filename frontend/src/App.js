@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const PRIORITIES = ['baixa', 'media', 'alta'];
+const PRIORIDADES = ['baixa', 'media', 'alta'];
 
 function App() {
-  const [orders, setOrders] = useState([]);
+  const [pedidos, setPedido] = useState([]);
   const [form, setForm] = useState({ x: '', y: '', weight: '', priority: 'baixa' });
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  function handleChange(e) {
+  function idMudanca(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function addOrder() {
+  function addPedido() {
     if (
       form.x === '' ||
       form.y === '' ||
@@ -26,8 +26,8 @@ function App() {
       alert('Preencha os campos corretamente');
       return;
     }
-    setOrders([
-      ...orders,
+    setPedido([
+      ...pedidos,
       {
         x: Number(form.x),
         y: Number(form.y),
@@ -38,14 +38,14 @@ function App() {
     setForm({ x: '', y: '', weight: '', priority: 'baixa' });
   }
 
-  async function allocate() {
-    if (orders.length === 0) {
+  async function alocar() {
+    if (pedidos.length === 0) {
       alert('Adicione pelo menos um pedido');
       return;
     }
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:4000/allocate', { orders });
+      const res = await axios.post('http://localhost:4000/alocar', { pedidos });
       setResult(res.data);
     } catch (err) {
       alert('Erro ao alocar drones');
@@ -67,7 +67,7 @@ function App() {
               placeholder="Horizontal (X)"
               name="x"
               value={form.x}
-              onChange={handleChange}
+              onChange={idMudanca}
             />
           </div>
           <div className="col-md-2">
@@ -77,7 +77,7 @@ function App() {
               placeholder="Vertical (Y)"
               name="y"
               value={form.y}
-              onChange={handleChange}
+              onChange={idMudanca}
             />
           </div>
           <div className="col-md-3">
@@ -87,7 +87,7 @@ function App() {
               placeholder="Peso (kg)"
               name="weight"
               value={form.weight}
-              onChange={handleChange}
+              onChange={idMudanca}
             />
           </div>
           <div className="col-md-3">
@@ -95,9 +95,9 @@ function App() {
               className="form-select"
               name="priority"
               value={form.priority}
-              onChange={handleChange}
+              onChange={idMudanca}
             >
-              {PRIORITIES.map((p) => (
+              {PRIORIDADES.map((p) => (
                 <option key={p} value={p}>
                   {p.charAt(0).toUpperCase() + p.slice(1)}
                 </option>
@@ -105,7 +105,7 @@ function App() {
             </select>
           </div>
           <div className="col-md-2">
-            <button className="btn btn-primary w-100" onClick={addOrder}>
+            <button className="btn btn-primary w-100" onClick={addPedido}>
               Adicionar
             </button>
           </div>
@@ -113,8 +113,8 @@ function App() {
       </div>
 
       <h4>Pedidos</h4>
-      {orders.length === 0 && <p>Nenhum pedido adicionado.</p>}
-      {orders.length > 0 && (
+      {pedidos.length === 0 && <p>Nenhum pedido adicionado.</p>}
+      {pedidos.length > 0 && (
         <table className="table table-striped">
           <thead>
             <tr>
@@ -126,7 +126,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((o, i) => (
+            {pedidos.map((o, i) => (
               <tr key={i}>
                 <td>{i + 1}</td>
                 <td>{o.x}</td>
@@ -139,7 +139,7 @@ function App() {
         </table>
       )}
 
-      <button className="btn btn-success my-3" onClick={allocate} disabled={loading}>
+      <button className="btn btn-success my-3" onClick={alocar} disabled={loading}>
         {loading ? 'Alocando...' : 'Alocar Drones'}
       </button>
 
@@ -152,7 +152,7 @@ function App() {
               <p>Distância total: {drone.distance.toFixed(2)} km</p>
               <p>Pedidos:</p>
               <ul>
-                {drone.orders.map((o, idx) => (
+                {drone.pedidos.map((o, idx) => (
                   <li key={idx}>
                     Localização: ({o.x}, {o.y}), Peso: {o.weight} kg, Prioridade: {o.priority}
                   </li>
